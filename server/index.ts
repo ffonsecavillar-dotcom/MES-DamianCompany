@@ -184,7 +184,10 @@ app.post(
     }
     const payload = validatePayload(collection, req.body);
     if (collection === "users") {
-      payload.passwordHash = bcrypt.hashSync(String(payload.password ?? process.env.ADMIN_PASSWORD ?? "admin123"), 10);
+      payload.passwordHash = bcrypt.hashSync(
+        String(payload.password ?? process.env.ADMIN_PASSWORD ?? (process.env.VERCEL ? "admin-password-not-configured" : "admin123")),
+        10
+      );
       delete payload.password;
     }
     const row = await store.create(collection, payload);

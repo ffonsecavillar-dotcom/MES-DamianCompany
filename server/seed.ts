@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
 import type { AppData, CollectionName, EntityRecord } from "./types.js";
 
-export const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "admin@mes.local";
-export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "admin123";
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? (process.env.VERCEL ? "admin-not-configured@mes.local" : "admin@mes.local");
+export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? (process.env.VERCEL ? "admin-password-not-configured" : "admin123");
 
 const now = () => new Date().toISOString();
 
