@@ -50,6 +50,8 @@ const verifyUser = (req: IncomingMessage): SessionUser | undefined => {
 
 const getPath = (req: IncomingMessage) => {
   const url = new URL(req.url ?? "/", "https://mes.local");
+  const rewrittenPath = url.searchParams.get("path");
+  if (rewrittenPath) return `/api/${rewrittenPath.replace(/^\/+/, "")}`;
   return url.pathname.replace(/^\/api\/index/, "/api");
 };
 
