@@ -56,8 +56,8 @@ const defaultRecord = (config: ModuleConfig) =>
   );
 
 function Login({ onLogin }: { onLogin: (user: User) => void }) {
-  const [email, setEmail] = useState("admin@mes.local");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const submit = async (event: React.FormEvent) => {
@@ -90,7 +90,6 @@ function Login({ onLogin }: { onLogin: (user: User) => void }) {
         <button className="button primary full" type="submit">
           Entrar al sistema
         </button>
-        <small>Demo: admin@mes.local / admin123</small>
       </form>
     </main>
   );

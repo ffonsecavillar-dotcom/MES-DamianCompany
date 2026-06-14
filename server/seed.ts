@@ -2,6 +2,9 @@ import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
 import type { AppData, CollectionName, EntityRecord } from "./types.js";
 
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "admin@mes.local";
+export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "admin123";
+
 const now = () => new Date().toISOString();
 
 const record = (data: Record<string, unknown>): EntityRecord => ({
@@ -38,17 +41,17 @@ export const createSeedData = (): AppData => {
 
   const admin = record({
     name: "Admin MES",
-    email: "admin@mes.local",
+    email: ADMIN_EMAIL,
     role: "administrador",
     active: true,
-    passwordHash: bcrypt.hashSync("admin123", 10)
+    passwordHash: bcrypt.hashSync(ADMIN_PASSWORD, 10)
   });
   const engineer = record({
     name: "Ingenieria",
     email: "ingenieria@mes.local",
     role: "ingenieria",
     active: true,
-    passwordHash: bcrypt.hashSync("admin123", 10)
+    passwordHash: bcrypt.hashSync(ADMIN_PASSWORD, 10)
   });
   data.users.push(admin, engineer);
 
@@ -433,4 +436,31 @@ export const createSeedData = (): AppData => {
   );
 
   return data;
+};
+
+export const ensureAdminCredentials = (data: AppData) => {
+  const admin =
+    data.users.find((user) => user.email === ADMIN_EMAIL) ??
+    data.users.find((user) => user.email === "admin@mes.local") ??
+    data.users.find((user) => user.role === "administrador");
+
+  if (admin) {
+    admin.name = "Admin MES";
+    admin.email = ADMIN_EMAIL;
+    admin.role = "administrador";
+    admin.active = true;
+    admin.passwordHash = bcrypt.hashSync(ADMIN_PASSWORD, 10);
+    admin.updatedAt = now();
+    return;
+  }
+
+  data.users.push(
+    record({
+      name: "Admin MES",
+      email: ADMIN_EMAIL,
+      role: "administrador",
+      active: true,
+      passwordHash: bcrypt.hashSync(ADMIN_PASSWORD, 10)
+    })
+  );
 };

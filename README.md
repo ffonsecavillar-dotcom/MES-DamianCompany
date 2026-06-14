@@ -24,11 +24,11 @@ Abrir:
 http://localhost:4000
 ```
 
-Credenciales demo:
+Las credenciales de administrador se configuran con variables de entorno:
 
 ```text
-admin@mes.local
-admin123
+ADMIN_EMAIL
+ADMIN_PASSWORD
 ```
 
 ## Desarrollo

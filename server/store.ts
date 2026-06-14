@@ -3,7 +3,7 @@ import path from "node:path";
 import { nanoid } from "nanoid";
 import { Pool } from "pg";
 import { collections, type AppData, type CollectionName, type EntityRecord, type Store } from "./types.js";
-import { createSeedData } from "./seed.js";
+import { createSeedData, ensureAdminCredentials } from "./seed.js";
 
 const now = () => new Date().toISOString();
 
@@ -26,8 +26,11 @@ export class JsonFileStore implements Store {
     try {
       const raw = await fs.readFile(this.filePath, "utf8");
       this.data = JSON.parse(raw) as AppData;
+      ensureAdminCredentials(this.data);
+      await this.persist();
     } catch {
       this.data = createSeedData();
+      ensureAdminCredentials(this.data);
       await this.persist();
     }
   }
@@ -103,6 +106,13 @@ export class PostgresStore implements Store {
     `);
     const { rows } = await this.pool.query("select count(*)::int as count from app_records where collection = 'users'");
     if (rows[0]?.count === 0) await this.replaceAll(createSeedData());
+    else {
+      const allData = Object.fromEntries(
+        await Promise.all(collections.map(async (collection) => [collection, await this.list(collection)]))
+      ) as AppData;
+      ensureAdminCredentials(allData);
+      await this.replaceAll(allData);
+    }
   }
 
   async list(collection: CollectionName) {
