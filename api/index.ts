@@ -59,6 +59,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   await initStore();
   const path = getPath(req);
 
+  if (path === "/api/debug" || (req.url ?? "").includes("debug")) {
+    sendJson(res, 200, { rawUrl: req.url, computedPath: path, method: req.method });
+    return;
+  }
+
   if (req.method === "POST" && path === "/api/auth/login") {
     const { email, password } = await readJson(req);
     const users = await store.list("users");
