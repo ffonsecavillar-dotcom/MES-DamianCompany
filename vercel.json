@@ -3,12 +3,8 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index"
-    },
-    {
       "source": "/uploads/(.*)",
-      "destination": "/api/index"
+      "destination": "/api/uploads/$1"
     },
     {
       "source": "/(.*)",

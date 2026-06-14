@@ -31,10 +31,10 @@ const asyncHandler =
   (req: AuthedRequest, res: Response, next: NextFunction) =>
     handler(req, res).catch(next);
 
-const publicRoutes = new Set(["/auth/login"]);
+const publicRoutes = new Set(["/auth/login", "/api/auth/login", "/api/index/auth/login"]);
 
 const auth = (req: AuthedRequest, res: Response, next: NextFunction) => {
-  if (publicRoutes.has(req.path)) {
+  if (publicRoutes.has(req.path) || req.path.endsWith("/auth/login")) {
     next();
     return;
   }
