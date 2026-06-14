@@ -1,0 +1,10 @@
+node_modules/
+.npm-cache/
+dist/
+server-dist/
+data/
+uploads/
+qa/
+.env
+*.log
+*.err
