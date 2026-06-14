@@ -6,5 +6,8 @@ data/
 uploads/
 qa/
 .env
+.vercel/
 *.log
 *.err
+
+.vercel
